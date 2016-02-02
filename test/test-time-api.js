@@ -15,7 +15,6 @@ describe('time api', function() {
       .get('/api/time')
       .expect(200)
       .expect(function(res) {
-        console.log(res.body.time);
         assert.match(res.body.time, /^\d{1,2}:\d\d ?([ap]m)?$/i);
       })
       .end(done);
