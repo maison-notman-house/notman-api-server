@@ -51,7 +51,8 @@ app.get('/api/events', function(req, res, next) {
 });
 
 app.get('/api/time', function(req, res, next) {
-  res.send(moment().tz('America/Toronto').format('H:mm a'));
+  var timeString = moment().tz('America/Toronto').format('H:mm a');
+  res.json({time: timeString});
 });
 
 // Route 404 handler

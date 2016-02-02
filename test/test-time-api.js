@@ -14,7 +14,10 @@ describe('time api', function() {
     request(app)
       .get('/api/time')
       .expect(200)
-      .expect(/\d{1,2}:\d\d ?([ap]m)?/i)
+      .expect(function(res) {
+        console.log(res.body.time);
+        assert.match(res.body.time, /^\d{1,2}:\d\d ?([ap]m)?$/i);
+      })
       .end(done);
   });
 });
