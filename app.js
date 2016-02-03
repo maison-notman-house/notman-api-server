@@ -51,7 +51,7 @@ app.get('/api/events', function(req, res, next) {
 });
 
 app.get('/api/time', function(req, res, next) {
-  var timeString = moment().tz('America/Toronto').format('H:mm a');
+  var timeString = moment().tz('America/Toronto').format('h:mm a');
   res.json({time: timeString});
 });
 
