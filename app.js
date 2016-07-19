@@ -2,8 +2,9 @@ var express = require('express');
 var moment = require('moment');
 var memoryCache = require('memory-cache');
 
-var MINUTES = 60000;
-var CACHE_TIMEOUT = 15 * MINUTES;
+const MINUTES = 60000;
+const CACHE_TIMEOUT = 15 * MINUTES;
+const DEFAULT_TIMEZONE = 'America/Toronto';
 
 var getCalendarEvents = require('./lib/get-calendar-events');
 var adaptCalendarEvent = require('./lib/adapt-calendar-event');
@@ -46,7 +47,7 @@ app.get('/api/events', function(req, res, next) {
 
   // handle option of returning time in UTC
   var utc = req.query['utc'];
-  var tz = (utc&&utc==='1'?'UTC':'America/Toronto');
+  var tz = (utc&&utc==='1'?'UTC':DEFAULT_TIMEZONE);
   options.timezone = tz;
 
   var calendarId = process.env.GOOGLE_CALENDAR_ID;
@@ -73,7 +74,7 @@ app.get('/api/time', function(req, res, next) {
   var format = (twentyfourHour&&twentyfourHour==='1'?'HH:mm':'h:mm a');
   // handle option of returning time in UTC
   var utc = req.query['utc'];
-  var tz = (utc&&utc==='1'?'UTC':'America/Toronto');
+  var tz = (utc&&utc==='1'?'UTC':DEFAULT_TIMEZONE);
   var timeString = moment().tz(tz).format(format);
   res.json({time: timeString});
 });
