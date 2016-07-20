@@ -2,8 +2,9 @@ var express = require('express');
 var moment = require('moment');
 var memoryCache = require('memory-cache');
 
-var MINUTES = 60000;
-var CACHE_TIMEOUT = 15 * MINUTES;
+const MINUTES = 60000;
+const CACHE_TIMEOUT = 15 * MINUTES;
+const DEFAULT_TIMEZONE = 'America/Toronto';
 
 var getCalendarEvents = require('./lib/get-calendar-events');
 var adaptCalendarEvent = require('./lib/adapt-calendar-event');
@@ -31,27 +32,50 @@ app.use(express.static('public'));
 
 // Route handlers
 app.get('/api/events', function(req, res, next) {
-  var cachedEvents = memoryCache.get('calendar-events');
+  // we use url as key, in order to support request with varying parameters
+  var cachedEvents = memoryCache.get(req.url);
   if (cachedEvents !== null) {
     res.json(cachedEvents);
     return;
   }
 
+  var options = {};
+
+  var twentyfourHour = req.query['24hour'];
+  var format = (twentyfourHour&&twentyfourHour==='1'?'HH:mm':'h:mm a');
+  options.timeFormat = format;
+
+  // handle option of returning time in UTC
+  var utc = req.query['utc'];
+  var tz = (utc&&utc==='1'?'UTC':DEFAULT_TIMEZONE);
+  options.timezone = tz;
+
   var calendarId = process.env.GOOGLE_CALENDAR_ID;
   var apiKey = process.env.GOOGLE_API_KEY;
 
-  if (!calendarId || !apiKey) throw new Error('Events API requires calendar config.');
+  if (!calendarId || !apiKey) {
+    throw new Error('Events API requires calendar config.');
+  }
 
   getCalendarEvents(calendarId, apiKey).then(function(events) {
-    var adaptedEvents = events.map(adaptCalendarEvent).slice(0, 5);
+    var adaptedEvents = events.map(
+        event => adaptCalendarEvent(event, options)
+        ).slice(0, 5);
+
     var groupedEvents = groupEventsByDate(adaptedEvents);
     res.json(groupedEvents);
-    memoryCache.put('calendar-events', groupedEvents, CACHE_TIMEOUT);
+    memoryCache.put(req.url, groupedEvents, CACHE_TIMEOUT);
   }).catch(next);
 });
 
 app.get('/api/time', function(req, res, next) {
-  var timeString = moment().tz('America/Toronto').format('h:mm a');
+  // handle option of returning time in 24 hours
+  var twentyfourHour = req.query['24hour'];
+  var format = (twentyfourHour&&twentyfourHour==='1'?'HH:mm':'h:mm a');
+  // handle option of returning time in UTC
+  var utc = req.query['utc'];
+  var tz = (utc&&utc==='1'?'UTC':DEFAULT_TIMEZONE);
+  var timeString = moment().tz(tz).format(format);
   res.json({time: timeString});
 });
 
@@ -62,5 +86,6 @@ app.use(function(req, res, next) {
 
 // Error handler
 app.use(require('errorhandler'));
+app.use(require('body-parser'));
 
 module.exports = app;
