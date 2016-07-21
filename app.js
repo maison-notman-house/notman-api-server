@@ -58,6 +58,18 @@ app.get('/api/events', function(req, res, next) {
   }
 
   getCalendarEvents(calendarId, apiKey).then(function(events) {
+    var i;
+    if ('1' !== req.query['private']) {
+        var selectedEvents = [];
+
+        for (i=0; i<events.length; i++) {
+            if (events[i].summary.endsWith('*')) {
+                selectedEvents.push(events[i]);
+            }
+        }
+        events = selectedEvents;
+    }
+
     var adaptedEvents = events.map(
         event => adaptCalendarEvent(event, options)
         ).slice(0, 5);
