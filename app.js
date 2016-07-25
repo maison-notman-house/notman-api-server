@@ -32,6 +32,14 @@ app.use(express.static('public'));
 
 // Route handlers
 app.get('/api/events', function(req, res, next) {
+
+  // flush the cache if we get flushcache=1, added to allow for cases
+  // where the calendar was updated and we want to see the results immediately
+
+  if ('1' === req.query['flushcache']) {
+    memoryCache.clear();
+  }
+
   // we use url as key, in order to support request with varying parameters
   var cachedEvents = memoryCache.get(req.url);
   if (cachedEvents !== null) {
