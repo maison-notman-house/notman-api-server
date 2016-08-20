@@ -99,6 +99,13 @@ app.get('/api/time', function(req, res, next) {
   res.json({time: timeString});
 });
 
+app.post('/refresh', function(req, res, next) {
+  app.wss.clients.forEach(ws => {
+    ws.send(JSON.stringify({message: 'refresh'}));
+  });
+  res.send();
+});
+
 // Route 404 handler
 app.use(function(req, res, next) {
   res.status(404).send('404');
@@ -107,5 +114,7 @@ app.use(function(req, res, next) {
 // Error handler
 app.use(require('errorhandler'));
 app.use(require('body-parser'));
+
+
 
 module.exports = app;
