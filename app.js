@@ -108,6 +108,20 @@ app.get('/api/time', function(req, res, next) {
   res.json({time: timeString});
 });
 
+app.get('/api/myseat/chairs', function(req, res, next) {
+  var url = `https://apiv3.myseat.fr/Request/GetChairs/key/${process.env.MYSEAT_API_KEY}`;
+
+  request(url, function(err, result) {
+    if (err) {
+      res.status(500).send();
+      console.error(err);
+      return;
+    }
+
+    res.status(result.statusCode).type(result.headers['content-type']).send(result.body);
+  });
+});
+
 app.post('/refresh', function(req, res, next) {
   app.wss.clients.forEach(ws => {
     ws.send(JSON.stringify({message: 'refresh'}));
