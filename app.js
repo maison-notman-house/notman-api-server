@@ -1,6 +1,8 @@
 var express = require('express');
 var moment = require('moment');
 var memoryCache = require('memory-cache');
+var request = require('request');
+var http = require("http");
 
 const MINUTES = 60000;
 const CACHE_TIMEOUT = 15 * MINUTES;
@@ -29,6 +31,13 @@ var logger = require('morgan');
 app.use(logger('dev'));
 
 app.use(express.static('public'));
+
+app.get('/api/keys', function(req, res, next) {
+   // TODO return all the vendor keys. limit by requesting domain?
+   res.json({
+       myseat: process.env.MYSEAT_API_KEY
+   });
+});
 
 // Route handlers
 app.get('/api/events', function(req, res, next) {
