@@ -254,9 +254,9 @@
       "resolved": "https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.2.tgz"
     },
     "cors": {
-      "version": "2.7.1",
-      "from": "cors@2.7.1",
-      "resolved": "https://registry.npmjs.org/cors/-/cors-2.7.1.tgz"
+      "version": "2.8.0",
+      "from": "cors@2.8.0",
+      "resolved": "https://registry.npmjs.org/cors/-/cors-2.8.0.tgz"
     },
     "cryptiles": {
       "version": "2.0.5",
