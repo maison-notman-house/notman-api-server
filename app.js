@@ -32,13 +32,6 @@ app.use(logger('dev'));
 
 app.use(express.static('public'));
 
-app.get('/api/keys', function(req, res, next) {
-   // TODO return all the vendor keys. limit by requesting domain?
-   res.json({
-       myseat: process.env.MYSEAT_API_KEY
-   });
-});
-
 // Route handlers
 app.get('/api/events', function(req, res, next) {
 
