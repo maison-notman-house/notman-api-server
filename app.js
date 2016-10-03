@@ -3,6 +3,7 @@ var moment = require('moment');
 var memoryCache = require('memory-cache');
 var request = require('request');
 var http = require("http");
+var url = require("url");
 
 const MINUTES = 60000;
 const CACHE_TIMEOUT = 15 * MINUTES;
@@ -101,10 +102,36 @@ app.get('/api/time', function(req, res, next) {
   res.json({time: timeString});
 });
 
-app.get('/api/myseat/chairs', function(req, res, next) {
-  var url = `https://apiv3.myseat.fr/Request/GetChairs/key/${process.env.MYSEAT_API_KEY}`;
 
-  request(url, function(err, result) {
+// See http://www.myseat.ca/api/ for API documentation
+// @deprecated will remove once front-end has been updated
+app.get('/api/myseat/chairs', function(req, res, next) {
+  var urlStr = `https://apiv3.myseat.fr/Request/GetChairs/key/${process.env.MYSEAT_API_KEY}`;
+
+  request(urlStr, function(err, result) {
+    if (err) {
+      res.status(500).send();
+      console.error(err);
+      return;
+    }
+
+    res.status(result.statusCode).type(result.headers['content-type']).send(result.body);
+  });
+});
+
+// New mySeat getter to allow other paths, supported by the mySeat API
+// mySeat API: http://www.myseat.ca/api/
+app.get(/^\/api\/myseat\/(.+)/, function(req, res, next) {
+  var urlObj = url.parse(req.url);
+  var query = urlObj.query
+  var pathname = urlObj.pathname
+  urlObj.protocol = 'https';
+  urlObj.hostname = 'apiv3.myseat.fr';
+  urlObj.pathname = `/Request/${req.params[0]}/key/${process.env.MYSEAT_API_KEY}`;
+
+  var urlStr = url.format(urlObj);
+
+  request(urlStr, function(err, result) {
     if (err) {
       res.status(500).send();
       console.error(err);
