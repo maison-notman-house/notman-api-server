@@ -35,8 +35,6 @@ app.use(logger('dev'));
 
 app.use(express.static('public'));
 
-
-
 // Route handlers
 
 /**
@@ -67,11 +65,11 @@ app.get('/api/events', function(req, res, next) {
 
   // whether to show times in 24 hour format, defaults to 12 hour
   var twentyfourHour = req.query['24hour'];
-  var format = (twentyfourHour&&twentyfourHour==='1'?'HH:mm':'h:mm a');
+  var format = (twentyfourHour && twentyfourHour === '1' ? 'HH:mm' : 'h:mm a');
   options.timeFormat = format;
 
   // handle option of returning time in UTC
-  options.timezone = (req.query['utc']==='1'?'UTC':DEFAULT_TIMEZONE);
+  options.timezone = (req.query['utc'] === '1' ? 'UTC' : DEFAULT_TIMEZONE);
   // whether to show the description, defaults to false
   options.showDescription = req.query['desc'] === 1;
   // how many days of events to show, defaults to 7
@@ -86,8 +84,8 @@ app.get('/api/events', function(req, res, next) {
   } else {
     maxEvents = parseInt(maxEvents);
     if (isNaN(maxEvents)) {
-       maxEvents = DEFAULT_MAX_EVENTS;
-       throw new Error('\'max\' is invalid, it should be -1 or a valid integer');
+      maxEvents = DEFAULT_MAX_EVENTS;
+      throw new Error('\'max\' is invalid, it should be -1 or a valid integer');
     }
   }
 
@@ -101,22 +99,22 @@ app.get('/api/events', function(req, res, next) {
   getCalendarEvents(calendarId, apiKey, days).then(function(events) {
     var i;
     if ('1' !== req.query['private']) {
-        var selectedEvents = [];
+      var selectedEvents = [];
 
-        for (i=0; i<events.length; i++) {
-            if (events[i].summary.endsWith('*')) {
-                selectedEvents.push(events[i]);
-            }
+      for (i = 0; i < events.length; i++) {
+        if (events[i].summary.endsWith('*')) {
+          selectedEvents.push(events[i]);
         }
-        events = selectedEvents;
+      }
+      events = selectedEvents;
     }
 
     var adaptedEvents = events.map(
-        event => adaptCalendarEvent(event, options)
-        );
+      event => adaptCalendarEvent(event, options)
+    );
     // By default we limit the number of the returned events, though now customisable
     if (maxEvents !== -1) {
-        adaptedEvents = adaptedEvents.slice(0, maxEvents);
+      adaptedEvents = adaptedEvents.slice(0, maxEvents);
     }
 
     var groupedEvents = groupEventsByDate(adaptedEvents);
@@ -128,12 +126,12 @@ app.get('/api/events', function(req, res, next) {
 app.get('/api/time', function(req, res, next) {
   // handle option of returning time in 24 hours
   var twentyfourHour = req.query['24hour'];
-  var format = (twentyfourHour&&twentyfourHour==='1'?'HH:mm':'h:mm a');
+  var format = (twentyfourHour && twentyfourHour === '1' ? 'HH:mm' : 'h:mm a');
   // handle option of returning time in UTC
   var utc = req.query['utc'];
-  var tz = (utc&&utc==='1'?'UTC':DEFAULT_TIMEZONE);
+  var tz = (utc && utc === '1' ? 'UTC' : DEFAULT_TIMEZONE);
   var timeString = moment().tz(tz).format(format);
-  res.json({time: timeString});
+  res.json({ time: timeString });
 });
 
 
@@ -178,7 +176,7 @@ app.get(/^\/api\/myseat\/(.+)/, function(req, res, next) {
 
 app.post('/refresh', function(req, res, next) {
   app.wss.clients.forEach(ws => {
-    ws.send(JSON.stringify({message: 'refresh'}));
+    ws.send(JSON.stringify({ message: 'refresh' }));
   });
   res.send();
 });
@@ -192,10 +190,10 @@ app.use(require('body-parser'));
 
 // Error handler
 app.use(function(err, req, res, next) {
-   res.status(500).json({
-      status: 500,
-      message:  err.message
-   });
+  res.status(500).json({
+    status: 500,
+    message: err.message
+  });
 });
 
 
