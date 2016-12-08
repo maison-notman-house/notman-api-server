@@ -18,12 +18,14 @@
     "errorhandler": "1.4.3",
     "express": "4.13.4",
     "helmet": "1.1.0",
+    "http": "0.0.0",
     "json-schema": "0.2.2",
     "lodash": "4.1.0",
     "memory-cache": "0.1.4",
     "moment": "2.11.1",
     "moment-timezone": "0.5.0",
     "morgan": "1.6.1",
+    "request": "^2.74.0",
     "request-promise": "2.0.0"
   },
   "devDependencies": {
