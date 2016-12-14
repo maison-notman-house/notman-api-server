@@ -58,6 +58,23 @@ app.get(/^\/vendor\/(.+)\/(.*)/, function(req, res, next) {
 
 
 // Route handlers
+
+// TODO have the version actually be the GIT hash
+app.get('/api/', function(req, res, next) {
+    res.json({
+        name: 'Notman API Server',
+        version: '1.0.1'
+    })
+});
+
+// API version is likely to start at '1' for a while
+// We will focus on backwards compatibiltiy for now
+app.get('/api/', function(req, res, next) {
+    res.json({
+        apiVersion: 1
+    })
+});
+
 app.get('/api/events', function(req, res, next) {
 
     // flush the cache if we get flushcache=1, added to allow for cases
@@ -129,6 +146,11 @@ app.get('/api/netatmo/environment', function(req, res, next) {
         });
 });
 
+/**
+ * Returns the time on the server. Provided, since the time
+ * on the Raspberry Pi was proving unreliable. 
+ * 
+ */
 app.get('/api/time', function(req, res, next) {
     // handle option of returning time in 24 hours
     var twentyfourHour = req.query['24hour'];
@@ -140,12 +162,30 @@ app.get('/api/time', function(req, res, next) {
     res.json({ time: timeString });
 });
 
+/**
+ * Returns the occupant directory of Notman House. Currently
+ * only deals with businesses names and Notman management staff.
+ * 
+ * Currently accepted query parameters:
+ *   - floor
+ *   - building
+ */
 app.get('/api/directory', function(req, res, next) {
     var floor = req.query.floor;
     var building = req.query.building;
-    res.json(getOccupants(floor, building));
+    var format = req.query.format;
+    if (!format || format === 'json') {
+        res.json(getOccupants(floor, building, format));
+    } else {
+        res.type('text/plain');
+        res.send(getOccupants(floor, building, format));
+    }
 })
 
+/**
+ * Returns the mySeat data. Should this be removed due to mySeat
+ * no longer being part of the 'Hack the House' initiative?
+ */
 app.get('/api/myseat/chairs', function(req, res, next) {
     var url = `https://apiv3.myseat.fr/Request/GetChairs/key/${process.env.MYSEAT_API_KEY}`;
 
