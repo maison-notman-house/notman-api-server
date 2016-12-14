@@ -1,43 +1,44 @@
 {
-    "name": "notman-api-server",
-    "version": "1.0.0",
-    "description": "",
-    "main": "app.js",
-    "private": "true",
-    "scripts": {
-        "start": "node start.js",
-        "dev": "node_modules/.bin/nodemon start.js",
-        "test": "node_modules/.bin/mocha"
-    },
-    "author": "",
-    "license": "MIT",
-    "dependencies": {
-        "body-parser": "^1.15.2",
-        "cors": "^2.8.0",
-        "dotenv": "^2.0.0",
-        "errorhandler": "^1.4.3",
-        "eslint": "^3.12.1",
-        "express": "^4.14.0",
-        "helmet": "^3.1.0",
-        "json-schema": "^0.2.2",
-        "lodash": "^4.15.0",
-        "memory-cache": "^0.1.6",
-        "moment": "^2.14.1",
-        "moment-timezone": "^0.5.5",
-        "morgan": "^1.7.0",
-        "netatmo": "^2.0.0",
-        "request": "^2.74.0",
-        "request-promise": "^4.1.1",
-        "ws": "^1.1.1"
-    },
-    "devDependencies": {
-        "chai": "^3.5.0",
-        "chai3-json-schema": "^1.2.1",
-        "mocha": "^3.0.2",
-        "nodemon": "^1.10.2",
-        "supertest": "^2.0.0"
-    },
-    "engines": {
-        "node": "^6.3.1"
-    }
+  "name": "notman-api-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "private": "true",
+  "scripts": {
+    "start": "node start.js",
+    "dev": "node_modules/.bin/nodemon start.js",
+    "test": "node_modules/.bin/mocha"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "cors": "^2.8.0",
+    "dotenv": "^2.0.0",
+    "errorhandler": "^1.4.3",
+    "eslint": "^3.12.1",
+    "express": "^4.14.0",
+    "helmet": "^3.1.0",
+    "json-schema": "^0.2.2",
+    "json2csv": "^3.7.3",
+    "lodash": "^4.15.0",
+    "memory-cache": "^0.1.6",
+    "moment": "^2.14.1",
+    "moment-timezone": "^0.5.5",
+    "morgan": "^1.7.0",
+    "netatmo": "^2.0.0",
+    "request": "^2.74.0",
+    "request-promise": "^4.1.1",
+    "ws": "^1.1.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai3-json-schema": "^1.2.1",
+    "mocha": "^3.0.2",
+    "nodemon": "^1.10.2",
+    "supertest": "^2.0.0"
+  },
+  "engines": {
+    "node": "^6.3.1"
+  }
 }

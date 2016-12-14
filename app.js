@@ -1,8 +1,4 @@
 const express = require('express');
-const moment = require('moment');
-const memoryCache = require('memory-cache');
-const request = require('request');
-const http = require("http");
 
 const events = require('./lib/services/events');
 const occupantsDirectory = require('./lib/services/occupants-directory');
@@ -11,10 +7,6 @@ const mySeat = require('./lib/services/myseat');
 const vendor = require('./lib/services/vendor');
 
 const time = require('./lib/services/time');
-
-const MINUTES = 60000;
-const CACHE_TIMEOUT = 15 * MINUTES;
-const DEFAULT_TIMEZONE = 'America/Toronto';
 
 var app = express();
 
