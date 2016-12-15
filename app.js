@@ -5,6 +5,7 @@ const occupantsDirectory = require('./lib/services/occupants-directory');
 const netatmo = require('./lib/services/netatmo');
 const mySeat = require('./lib/services/myseat');
 const vendor = require('./lib/services/vendor');
+const reelyactive = require('./lib/services/reelyactive');
 
 const time = require('./lib/services/time');
 
@@ -55,6 +56,7 @@ app.get('/api/netatmo/environment', netatmo.handleGetStationData);
 app.get('/api/time', time.handleGetTime);
 app.get('/api/directory', occupantsDirectory.handleGetOccupants);
 app.get('/api/myseat/chairs', mySeat.handleGetChairs);
+app.get('/api/reelyactive/devices', reelyactive.handleGetDeviceDirectory);
 
 app.post('/refresh', function(req, res, next) {
     app.wss.clients.forEach(ws => {
