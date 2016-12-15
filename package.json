@@ -18,9 +18,9 @@
     "errorhandler": "^1.4.3",
     "eslint": "^3.12.1",
     "express": "^4.14.0",
+    "fast-csv": "^2.3.0",
     "helmet": "^3.1.0",
     "json-schema": "^0.2.2",
-    "json2csv": "^3.7.3",
     "lodash": "^4.15.0",
     "memory-cache": "^0.1.6",
     "moment": "^2.14.1",
@@ -40,7 +40,7 @@
   },
   "optionalDependencies": {
     "fsevents": "*"
-  },  
+  },
   "engines": {
     "node": "^6.3.1"
   }
