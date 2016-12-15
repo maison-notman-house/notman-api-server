@@ -38,6 +38,9 @@
     "nodemon": "^1.10.2",
     "supertest": "^2.0.0"
   },
+  "optionalDependencies": {
+    "fsevents": "*"
+  },  
   "engines": {
     "node": "^6.3.1"
   }
