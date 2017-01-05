@@ -1,5 +1,5 @@
 const express = require('express');
-
+const fs = require('fs');
 const events = require('./lib/services/events');
 const occupantsDirectory = require('./lib/services/occupants-directory');
 const netatmo = require('./lib/services/netatmo');
@@ -7,7 +7,24 @@ const mySeat = require('./lib/services/myseat');
 const vendor = require('./lib/services/vendor');
 const reelyactive = require('./lib/services/reelyactive');
 
+const gDriveSync = require('./lib/services/gdrive-sync');
+
+const config = require('./lib/config');
 const time = require('./lib/services/time');
+const key = require('./key.json');
+
+var driveCache = 'gdrive-cache';
+
+try {
+    console.log('createing: ', config.cacheDir);
+    fs.mkdirSync(config.cacheDir);
+} catch (err) {
+    // ignore
+}
+
+// Init the occupants directory, which gets its data from Google
+occupantsDirectory.init();
+
 
 var app = express();
 
@@ -47,7 +64,6 @@ app.get('/api/', function(req, res, next) {
         apiVersion: 1
     })
 });
-
 
 app.get(/^\/api\/vendor\/([^/]+)\/(.*)/, vendor.handleGets);
 app.get('/api/events', events.handleGetEvents);
