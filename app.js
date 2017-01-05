@@ -11,7 +11,6 @@ const gDriveSync = require('./lib/services/gdrive-sync');
 
 const config = require('./lib/config');
 const time = require('./lib/services/time');
-const key = require('./key.json');
 
 var driveCache = 'gdrive-cache';
 
