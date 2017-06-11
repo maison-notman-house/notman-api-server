@@ -12,6 +12,14 @@ const gDriveSync = require('./lib/services/gdrive-sync');
 const config = require('./lib/config');
 const time = require('./lib/services/time');
 
+
+function logRequest(req, res, next) {
+    // ensure that the header x-forwarded-for, is from a trusted proxy
+    var remoteAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    console.log('request', req.method, req.originalUrl, remoteAddress);
+    next();
+}
+
 var driveCache = 'gdrive-cache';
 
 try {
@@ -64,14 +72,21 @@ app.get('/api/', function(req, res, next) {
     })
 });
 
-app.get(/^\/api\/vendor\/([^/]+)\/(.*)/, vendor.handleGets);
-app.get('/api/events', events.handleGetEvents);
-app.get('/api/netatmo/environment', netatmo.handleGetStationData);
 
-app.get('/api/time', time.handleGetTime);
-app.get('/api/directory', occupantsDirectory.handleGetOccupants);
-app.get('/api/myseat/chairs', mySeat.handleGetChairs);
-app.get('/api/reelyactive/devices', reelyactive.handleGetDeviceDirectory);
+const router = express.Router();
+app.use('/api/', router);
+
+router.all(/.*/, logRequest);
+
+router.get(/^\/vendor\/([^/]+)\/(.*)/, vendor.handleGets);
+router.get('/events', events.handleGetEvents);
+router.get('/netatmo/environment', netatmo.handleGetStationData);
+
+router.get('/time', time.handleGetTime);
+router.get(/directory\/([^/]+)\/logo/, occupantsDirectory.handleGetOccupantLogo);
+router.get('/directory', occupantsDirectory.handleGetDirectory);
+router.get('/myseat/chairs', mySeat.handleGetChairs);
+router.get('/reelyactive/devices', reelyactive.handleGetDeviceDirectory);
 
 app.post('/refresh', function(req, res, next) {
     app.wss.clients.forEach(ws => {
