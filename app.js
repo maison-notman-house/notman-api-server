@@ -84,6 +84,7 @@ router.get('/netatmo/environment', netatmo.handleGetStationData);
 
 router.get('/time', time.handleGetTime);
 router.get(/directory\/([^/]+)\/logo/, occupantsDirectory.handleGetOccupantLogo);
+router.get(/directory\/([^/]+)\/avatar/, occupantsDirectory.handleGetOccupantAvatar);
 router.get('/directory', occupantsDirectory.handleGetDirectory);
 router.get('/myseat/chairs', mySeat.handleGetChairs);
 router.get('/reelyactive/devices', reelyactive.handleGetDeviceDirectory);
