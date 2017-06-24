@@ -7,7 +7,7 @@ const mySeat = require('./lib/services/myseat');
 const vendor = require('./lib/services/vendor');
 const reelyactive = require('./lib/services/reelyactive');
 
-const gDriveSync = require('./lib/services/gdrive-sync');
+const gDriveSync = require('sync-gdrive');
 
 const config = require('./lib/config');
 const time = require('./lib/services/time');
