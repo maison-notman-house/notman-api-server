@@ -1,4 +1,6 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+
 const fs = require('fs');
 const events = require('./lib/services/events');
 const occupantsDirectory = require('./lib/services/occupants-directory');
@@ -6,6 +8,7 @@ const netatmo = require('./lib/services/netatmo');
 const mySeat = require('./lib/services/myseat');
 const vendor = require('./lib/services/vendor');
 const reelyactive = require('./lib/services/reelyactive');
+const devices = require('./lib/services/devices');
 
 const gDriveSync = require('sync-gdrive');
 
@@ -53,8 +56,9 @@ app.use(logger('dev'));
 
 app.use(express.static('public'));
 
-// Route handlers
+app.use(bodyParser.json());
 
+// Route handlers
 
 // TODO have the version actually be the GIT hash
 app.get('/api/', function(req, res, next) {
@@ -89,6 +93,10 @@ router.get('/directory', occupantsDirectory.handleGetDirectory);
 router.get('/myseat/chairs', mySeat.handleGetChairs);
 router.get('/reelyactive/devices', reelyactive.handleGetDeviceDirectory);
 
+router.post('/devices/:devicename', devices.handleRegisterDevice);
+router.get('/devices/:devicename', devices.handleGetDevice);
+router.get('/devices', devices.handleGetDeviceDirectory);
+
 app.post('/refresh', function(req, res, next) {
     app.wss.clients.forEach(ws => {
         ws.send(JSON.stringify({ message: 'refresh' }));
@@ -103,6 +111,6 @@ app.use(function(req, res, next) {
 
 // Error handler
 app.use(require('errorhandler'));
-app.use(require('body-parser'));
+
 
 module.exports = app;
