@@ -60,11 +60,18 @@ app.use(bodyParser.json());
 
 // Route handlers
 
-// TODO have the version actually be the GIT hash
-app.get('/api/', function(req, res, next) {
+app.get('/', function(req, res, next) {
     res.json({
         name: 'Notman API Server',
         version: '1.0.1'
+    })
+});
+
+// TODO have the version actually be the GIT hash
+app.get('/api/', function(req, res, next) {
+    res.json({
+        name: 'Notman API',
+        version: '1'
     })
 });
 
